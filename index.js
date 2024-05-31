@@ -18,19 +18,17 @@ async function main() {
 server.use(cors());
 server.use(express.json());
 server.use(morgan('default'))
-// console.log(path.resolve(__dirname,process.env.PUBLIC_DIR));
-server.use(express.static(path.resolve(__dirname,process.env.PUBLIC_DIR)));
+try {
+  console.log(path.resolve(__dirname,process.env.PUBLIC_DIR));
 // console.log(userRouter)
 server.use('/users',userRouter.router);
 server.use('/products',productRouter.router);
-server.use('*',(req,res)=>res.sendFile(path.resolve(__dirname,process.env.PUBLIC_DIR,'index.html')))
+// server.use('*',(req,res)=>res.sendFile(path.resolve(__dirname,process.env.PUBLIC_DIR,'index.html')))
+server.use(express.static(path.resolve(__dirname,process.env.PUBLIC_DIR)));
+} catch (error) {
+  console.log(error.message)
+}
 
-server.get('/demo', (req, res) => {
-  // res.sendStatus(404);
-  // res.json(products)
-  // res.status(201).send('<h1>hello</h1>')
-  // res.sendFile('/Users/abhishekrathore/Desktop/node-app/index.html')
-});
 
 server.listen(process.env.PORT, () => {
   console.log('server started on port :',process.env.PORT);
